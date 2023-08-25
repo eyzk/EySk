@@ -1,5 +1,4 @@
-# EySk (Eyzk + Skript)
-A public database of some Skript projects I've worked on before.
+### EySk
+A public repository of Skript projects I've worked on before.
 
-Skripts are not designed for intense use.
-Little to no options available. Change the code to your desire.
+Skripts are not designed for intense use. If you find a script is not functional, please create an Issue or Pull Request.
