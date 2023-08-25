@@ -1,0 +1,27 @@
+# User-specific backpacks.
+
+command backpack: # Opens the player's backpack
+    permission: bp.use
+    trigger:
+        set {_bp} to chest inventory with 3 rows named "&fBackpack"
+        loop 27 times:
+            set slot (loop-value)-1 of {_bp} to {bp::%player's uuid%::%loop-value%}
+        open {_bp} to player
+
+on inventory close: # Sets the items within the backpack (this system can be improved)
+    if event-inventory's name = "&fBackpack":
+        loop 27 times:
+            set {bp::%player's uuid%::%loop-value%} to slot (loop-value)-1 of event-inventory
+            stop
+    if event-inventory's name contains "&cBackpack":
+        loop 27 times:
+            set {bp::%{viewing::%player's uuid%}%::%loop-value%} to slot (loop-value)-1 of event-inventory
+
+command backpackview <offline player>: # Allows you to view player's backpacks
+    permission: bp.admin
+    trigger:
+        set {viewing::%player's uuid%} to arg's uuid
+        set {_bp} to chest inventory with 3 rows named "%arg%'s &cBackpack"
+        loop 27 times:
+            set slot (loop-value)-1 of {_bp} to {bp::%arg's uuid%::%loop-value%}
+        open {_bp} to player

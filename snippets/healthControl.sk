@@ -1,0 +1,15 @@
+# Player health control.
+
+command sethearts <player> <number>: # Sets a player's hearts to the given number
+	permission: hc.admin
+	trigger:
+		set the maximum health of player-arg to number-arg
+
+on tab complete of "/sethearts" or "/heal":
+	set tab completions of position 1 to players
+
+command heal [<player>] [<number>]: # Heals the given player by the given number
+	permission: hc.admin
+	trigger:
+		heal (player-arg ? player) by (number-arg ? player's maximum health)
+		feed (player-arg ? player) by 10

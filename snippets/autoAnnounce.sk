@@ -1,0 +1,35 @@
+# Automatic announcements.
+
+on load:
+    clear {announcement}
+
+command toggleannouncements: # Toggles server-wide auto-announcements
+    permission: aa.admin
+    trigger:
+        if {announcement} = false:
+            set {announcement} to true
+            send "&aEnabled announcements."
+            stop
+        if {announcement} = true:
+            set {announcement} to false
+            send "&cDisabled announcements."
+
+every 300 seconds:
+	{exception} is false
+	if {announcement} is not set:
+		broadcast "" # Your message to broadcast (add multiple rows if necessary)
+		set {announcement} to 1 # Tells the game which announcement will be sent next
+		stop # Stops the game from duplicating announcements
+
+	if {announcement} = 1:
+		broadcast ""
+		set {announcement} to 2
+		stop
+
+	if {announcement} = 2:
+		broadcast ""
+		clear {announcement}
+		stop
+
+# This code can be extended as long as you prefer by copy and pasting previous entries.
+# When adding more, make sure {@announcement} is cleared at the end of the last announcement.

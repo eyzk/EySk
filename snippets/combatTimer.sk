@@ -1,0 +1,28 @@
+# Player combat timer.
+
+on damage of a player: # Sets the combat timer
+    attacker = a player
+    attacker != victim
+    set {combatVar::%victim's uuid%} and {combatVar::%attacker's uuid%} to 11
+    send action bar "&cYou entered combat!" to attacker and victim
+
+on quit: # Punishes player who leave during combat
+	if {combatVar::%player's uuid%} != 0:
+		kill player
+		set {combatVar::%player's uuid%} to 0
+		broadcast "&c%player% left during combat!"
+
+on connect: # Resets combat timer on connect
+	set {combatVar::%player's uuid%} to 0
+
+on death: # Resets combat timer on death
+	set {combatVar::%attacker's uuid%} to 0
+
+on command: # Stops command usage during combat
+	if {combatVar::%player's uuid%} != 0:
+		if player does not have permission "ct.admin":
+			cancel event
+			send "&cYou cannot use commands in combat."
+
+every second: # Decreases the combat timer by one
+    remove 1 from {combatVar::*}

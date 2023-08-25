@@ -1,0 +1,24 @@
+# Customizable death messages.
+
+on first join: # Defaults death messages to on
+    set {dmview::%player's uuid%} to true
+
+command deathmessages <text>: # Allows death message toggling
+    permission: dm.default
+    trigger:
+        if arg = "on":
+            set {dmview::%player's uuid%} to true
+            send "&aEnabled death messages"
+        else if arg = "off":
+            set {dmview::%player's uuid%} to false
+            send "&cDisabled death messages"
+
+on tab complete for "/deathmessages":
+    set tab completions to "off" and "on"
+
+on load: # Sets the death messages -- change this to include whatever messages you'd like
+    set {msgs::*} "killed", "slain", "turned to dust", "annihilated", and "erased"
+
+on death of player: # Sends the death message
+    attacker = a player:
+        set death message to "&c%victim% &7was %random element out of {msgs::*}% by %attacker%"

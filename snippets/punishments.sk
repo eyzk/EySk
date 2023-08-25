@@ -1,0 +1,66 @@
+# Punishment commands
+
+command ban <offline player> [<timespan>] [<text>]: # Bans a player
+	permission: p.ban
+	trigger:
+		if {ban::%arg-1's uuid%} is set:
+			send "&c%arg-1% is already banned."
+			stop
+		else:
+			set {ban::%arg-1's uuid%} to now
+			kick arg-1 due to text-arg
+			if timespan-arg is set:
+				set {bantime::%arg-1's uuid%} to timespan-arg
+
+on tab complete of "/unban", "/ban", "/unmute", "/mute", and "/kick":
+	set tab completion of position 1 to players
+
+command unban <offline player>: # Unbans a banned player
+	permission: p.ban
+	trigger:
+		if {ban::%arg's uuid%} is not set:
+			send "&c%arg% is not banned."
+			stop
+		else:
+			clear {ban::%arg's uuid%}
+			clear {bantime::%arg's uuid%}
+
+on connect:
+	if {ban::%player's uuid%} is set: # Prevents banned players from joining
+		if difference between {ban::%player's uuid%} and now < {bantime::%player's uuid%}:
+			kick player due to "&cYou are banned from this server."
+
+command mute <player> [<timespan>] [<text>]: # Mutes a player
+	permission: p.mute
+	trigger:
+		if {mute::%player-arg's uuid%} is set:
+			send "&c%player-arg% is already muted."
+			stop
+		else:
+			set {mute::%player-arg's uuid%} to now
+			if timespan-arg is set:
+				set {mutetime::%player-arg's uuid%} to timespan-arg
+
+command unmute <offline player>: # Unmutes a muted player
+	permission: p.mute
+	trigger:
+		if {mute::%arg's uuid%} is not set:
+			send "&c%arg% is not muted."
+			stop
+		else:
+			clear {mute::%arg's uuid%}
+			clear {mutetime::%arg's uuid%}
+
+on chat: # Prevents muted players from chatting
+	if {mute::%player's uuid%} is set:
+		if difference between {mute::%player's uuid%} and now < {mutetime::%player's uuid%}:
+			cancel event
+			send "&cYou are muted!"
+
+command kick <player> [<text>]: # Kicks a player
+	permission: helper.kick
+	trigger:
+		if arg-1 is not online:
+			send "&c%player-arg% is offline."
+			stop
+		kick arg-1 due to text-arg ? "&cYou were kicked."

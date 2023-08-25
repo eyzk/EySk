@@ -1,0 +1,25 @@
+# Ways of controlling ingame chat.
+
+command purge: # Clears the chat for non-modified clients
+    permission: cc.purge
+    trigger:
+        loop 100 times:
+            broadcast ""
+        broadcast "&cChat was purged by %player%"
+    
+command lock: # Locks the chat for most users
+    permission: cc.lock
+    trigger:
+        set {lock} to true
+        broadcast "&cChat was locked by %player%"
+    
+on chat: # Prevents users from chatting while chat is locked
+    if {lock} is true:
+        if player does not have permission "cc.lock":
+            cancel event
+    
+command unlock: # Unlocks the chat
+    permission: cc.lock
+    trigger:
+        set {lock} to false
+        broadcast "&aChat was unlocked by %player%"

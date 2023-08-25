@@ -1,0 +1,21 @@
+# Automatic and manual lag clear.
+
+function clearlag(): # The function to clear lag
+    kill dropped items
+    kill projectiles
+
+command clearlag: # Manual lag clearing
+    permission: cl.admin
+    trigger:
+        clearlag()
+
+every 60 minutes:
+    clearlag()
+
+on projectile hit: # Clears arrows stuck in players/in the ground
+    event-projectile is arrow
+    delete event-projectile
+
+on drop: # Deletes dropped items after some time
+    wait 120 seconds
+    delete event-dropped item

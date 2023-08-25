@@ -1,0 +1,37 @@
+# User report/warn system
+
+command warn <offline player> <text>: # Warn a player
+	permission: r.admin
+	trigger:
+		add "&f%player% &7> &c%arg-1% &7warned for &f%arg-2%" to {reports::*}
+		send "&fYou were warned for &c%arg-2%" to arg-1
+		play sound "block.note_block.pling" to arg-1
+
+command report <offline player> <text>: # Report a player
+    permission: r.user
+    trigger:
+        add "&f%player% &7> &c%arg-1% &7for &f%arg-2%" to {reports::*}
+        send action bar "&2Thank you for reporting!"
+
+on tab complete of "/report" or "/warn":
+	set tab completion for position 1 to players
+
+command reports: # View all reports
+	permission: r.admin
+	trigger:
+		send ""
+		loop {reports::*}:
+			send "&7>%loop-index%. %loop-value%"
+		send ""
+
+command delreport [<integer>]: # Delete a report
+	permission: r.admin
+	trigger:
+		if arg is set:
+			remove {reports::%arg%} from {reports::*}
+		else if arg is not set:
+			clear {reports::*}
+
+on tab complete of "/delreport":
+	loop {reports::*}:
+		set tab completions to loop-index

@@ -1,0 +1,34 @@
+# Various commands for item control.
+
+# Requires: SkBee
+
+command setflags <itemflag>: # Sets the visible flags of the player's tool
+    permission: ic.setflags
+    trigger:
+        add arg to hidden item flags of player's tool
+
+on tab complete of "/setflags":
+	set tab completions to itemflags
+
+command rename <text>: # Renames the player's tool
+	permission: ic.rename
+	trigger:
+		set name of player's tool to colored arg
+
+command lore <number> <text>: # Sets the lore of the player's tool
+	permission: ic.lore
+	trigger:
+		set line number-arg of lore of player's tool to colored text-arg
+
+command unbreakable: # Makes the player's tool unbreakable
+	permission: ic.unbreakable
+	trigger:
+		set player's tool to unbreakable tool
+
+command enchant <enchantment> <number>: # Enchants the player's tool
+	permission: ic.enchant
+	trigger:
+		enchant player's held item with ("%arg-1% %arg-2%" parsed as enchantment type)
+
+on tab complete of "/enchant":
+	set tab completions for position 1 to enchantments
